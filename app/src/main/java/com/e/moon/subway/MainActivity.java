@@ -5,8 +5,6 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -104,48 +102,54 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
         mTabHost = (TabHost)findViewById(android.R.id.tabhost);
         mTabHost.setup();
         TabInfo tabInfo = null;
-        MainActivity.AddTab(this, this.mTabHost, this.mTabHost.newTabSpec("Tab1").setIndicator(createTabView(this, res.getString(R.string.tab1), android.R.drawable.ic_menu_mylocation)), ( tabInfo = new TabInfo("Tab1", Fragment01.class, args)));
+        MainActivity.AddTab(this, this.mTabHost, this.mTabHost.newTabSpec("Tab1").setIndicator(createTabView(this, res.getString(R.string.tab1), R.drawable.tag)), ( tabInfo = new TabInfo("Tab1", Fragment01.class, args)));
         this.mapTabInfo.put(tabInfo.tag, tabInfo);
-        MainActivity.AddTab(this, this.mTabHost, this.mTabHost.newTabSpec("Tab2").setIndicator(createTabView(this, res.getString(R.string.tab2), R.drawable.menu_search)), ( tabInfo = new TabInfo("Tab2", Fragment02.class, args)));
+        MainActivity.AddTab(this, this.mTabHost, this.mTabHost.newTabSpec("Tab2").setIndicator(createTabView(this, res.getString(R.string.tab2), R.drawable.search)), ( tabInfo = new TabInfo("Tab2", Fragment02.class, args)));
         this.mapTabInfo.put(tabInfo.tag, tabInfo);
-        MainActivity.AddTab(this, this.mTabHost, this.mTabHost.newTabSpec("Tab3").setIndicator(createTabView(this, res.getString(R.string.tab3), android.R.drawable.ic_menu_mapmode)), ( tabInfo = new TabInfo("Tab3", Fragment03.class, args)));
+        MainActivity.AddTab(this, this.mTabHost, this.mTabHost.newTabSpec("Tab3").setIndicator(createTabView(this, res.getString(R.string.tab3), R.drawable.location_pin)), ( tabInfo = new TabInfo("Tab3", Fragment03.class, args)));
         this.mapTabInfo.put(tabInfo.tag, tabInfo);
-        MainActivity.AddTab(this, this.mTabHost, this.mTabHost.newTabSpec("Tab4").setIndicator(createTabView(this, res.getString(R.string.tab4), R.drawable.menu_settings)), ( tabInfo = new TabInfo("Tab4", Fragment04.class, args)));
+        MainActivity.AddTab(this, this.mTabHost, this.mTabHost.newTabSpec("Tab4").setIndicator(createTabView(this, res.getString(R.string.tab4), R.drawable.settings)), ( tabInfo = new TabInfo("Tab4", Fragment04.class, args)));
         this.mapTabInfo.put(tabInfo.tag, tabInfo);
+
         // Default to first tab
         //this.onTabChanged("Tab1");
-        //
+
         mTabHost.setOnTabChangedListener(this);
     }
 
     /**
-     * Add Tab content to the Tabhost
+     * 탭호스트를 탭에 추가한다.
      */
     private static void AddTab(MainActivity activity, TabHost tabHost, TabHost.TabSpec tabSpec, TabInfo tabInfo) {
-        // Attach a Tab view factory to the spec
         tabSpec.setContent(activity.new TabFactory(activity));
         tabHost.addTab(tabSpec);
     }
 
+    /**
+     * OnTabChangeListener method
+     * */
     public void onTabChanged(String tag) {
         //TabInfo newTab = this.mapTabInfo.get(tag);
         int pos = this.mTabHost.getCurrentTab();
         this.mViewPager.setCurrentItem(pos);
     }
 
+    /**
+     * OnPageChangeListener method
+     * */
     @Override
     public void onPageScrolled(int position, float positionOffset,
                                int positionOffsetPixels) {
     }
-
     @Override
     public void onPageSelected(int position) {
         this.mTabHost.setCurrentTab(position);   //page select -> tab change
     }
-
     @Override
     public void onPageScrollStateChanged(int state) {
     }
+
+
     /**
      * tab custom view
      */
@@ -160,27 +164,4 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
         return view;
     }
 
-}
-
-/**
- * 뷰페이저 어댑터를 정의합니다.
- */
-class PagerAdapter extends FragmentPagerAdapter {
-
-    private List<Fragment> fragments;
-
-    public PagerAdapter(FragmentManager fm, List<Fragment> fragments) {
-        super(fm);
-        this.fragments = fragments;
-    }
-
-    @Override
-    public Fragment getItem(int position) {
-        return this.fragments.get(position);
-    }
-
-    @Override
-    public int getCount() {
-        return this.fragments.size();
-    }
 }
