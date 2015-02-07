@@ -8,7 +8,11 @@
     <string name="tab2">search</string>
     <string name="tab3">map</string>
     <string name="tab4">setting</string>
-
-
+    <string name="tab1_text">Settings</string>
+    <string name="alarm">Station</string>
+    <string name="station1">Station Search</string>
+    <string name="ok">ok</string>
+    <string name="station2">Search</string>
+    <string name="map_key">AIzaSyD3Yt8U0fDYEpNRLhJ63NzVtMID_B4YjVE</string>
 
 </resources>

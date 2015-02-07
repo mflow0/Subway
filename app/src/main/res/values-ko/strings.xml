@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">지하철 노선도</string>
+    <string name="tab1">알람</string>
+    <string name="tab2">역 검색</string>
+    <string name="tab3">역 주변</string>
+    <string name="tab4">설정</string>
+    <string name="tab1_text">알람 설정</string>
+    <string name="alarm">역 설정</string>
+    <string name="station1">찾을 역을 입력해주세요.</string>
+    <string name="ok">확인</string>
+    <string name="station2">찾기</string>
+
+</resources>
