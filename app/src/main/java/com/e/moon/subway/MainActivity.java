@@ -77,7 +77,7 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-
+        new Common(this).showSettingsAlert();
         this.initTabHost(savedInstanceState);
 
         if (savedInstanceState != null) {

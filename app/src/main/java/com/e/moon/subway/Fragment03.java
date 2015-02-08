@@ -3,13 +3,11 @@ package com.e.moon.subway;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -64,6 +62,17 @@ public class Fragment03 extends Fragment {
         result = (TextView)view.findViewById(R.id.text22);
         final EditText editText = (EditText)view.findViewById(R.id.edit01);
         Button btn = (Button)view.findViewById(R.id.btn_ok);
+
+        //핸들러 + 스레드 사용하기 : 핸들러와 스레드에서 대해서 공부하자            ... 코드짜기
+/*
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+
+            }
+        })
+*/
+
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -116,13 +125,12 @@ public class Fragment03 extends Fragment {
                                     })
                                     .setNegativeButton("닫기", null)
                                     .show();
-                            //(스레드로 감싸기)
                         }catch(NullPointerException e) {
                             result.setText("주소를 찾을 수 없습니다.");
                         }
                     }
                 } else {
-                    showSettingsAlert();
+                    new Common(getActivity()).showSettingsAlert();
                 }
 
             }
@@ -134,7 +142,7 @@ public class Fragment03 extends Fragment {
             // 위치 확인하여 위치 표시 시작
             showCurrentLocation(37.563739, 126.978907);   //서울시청 : 37.563739, 126.978907 (위도, 경도)
         } else {
-            showSettingsAlert();
+            new Common(getActivity()).showSettingsAlert();
         }
         return view;
 	}
@@ -151,7 +159,9 @@ public class Fragment03 extends Fragment {
         return mobile.isConnected() || wifi.isConnected();
     }
 
-   /* @Override
+
+/*
+    @Override
     public void onResume() {
         super.onResume();
         new Handler().postDelayed(new Runnable()
@@ -165,8 +175,8 @@ public class Fragment03 extends Fragment {
                 }
             }
         }, 5500);// 5.5초 정도 딜레이를 준 후 시작
-
-    }*/
+    }
+*/
 
     /**
      * 현재 위치의 지도를 보여주기 위해 정의한 메소드
@@ -196,37 +206,5 @@ public class Fragment03 extends Fragment {
         map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
     }
-
-    /**
-     * 네트워크 정보를 가져오지 못했을때 설정값으로 갈지 물어보는 alert 창
-     * */
-    public void showSettingsAlert() {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(
-                getActivity());
-
-        alertDialog.setTitle("네트워크 설정");
-        alertDialog
-                .setMessage("네트워크가 활성화 되어있지 않습니다.\n\n 설정창으로 가시겠습니까?");
-
-        alertDialog.setPositiveButton("Ok",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog,
-                                        int which) {
-                        Intent intent = new Intent(
-                                Settings.ACTION_SETTINGS);
-                        startActivity(intent);
-                    }
-                });
-        alertDialog.setNegativeButton("Cancel",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog,
-                                        int which) {
-                        dialog.cancel();
-                    }
-                });
-
-        alertDialog.show();
-    }
-
 
 }
