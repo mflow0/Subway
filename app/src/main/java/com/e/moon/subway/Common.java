@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.provider.Settings;
 
 /**
@@ -46,5 +48,17 @@ public class Common {
                 });
 
         alertDialog.show();
+    }
+
+    /**
+     * 네트워크 연결 체크
+     */
+    protected boolean checkNetworkState() {
+        ConnectivityManager manager =
+                (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo mobile = manager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+        NetworkInfo wifi = manager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+        return mobile.isConnected() || wifi.isConnected();
     }
 }

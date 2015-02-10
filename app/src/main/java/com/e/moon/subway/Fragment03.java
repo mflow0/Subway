@@ -8,6 +8,7 @@ import android.location.Geocoder;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,6 +45,7 @@ public class Fragment03 extends Fragment {
     private HashMap<String,Double> req;  //위도 ,경도 담을 HashMap
     private String[] strings;
     private InputMethodManager input_Manager;
+    private final Handler handler = new Handler();
 
     TextView result;
 
@@ -61,17 +63,7 @@ public class Fragment03 extends Fragment {
         mCoder = new Geocoder(getActivity(), Locale.KOREAN);
         result = (TextView)view.findViewById(R.id.text22);
         final EditText editText = (EditText)view.findViewById(R.id.edit01);
-        Button btn = (Button)view.findViewById(R.id.btn_ok);
-
-        //핸들러 + 스레드 사용하기 : 핸들러와 스레드에서 대해서 공부하자            ... 코드짜기
-/*
-        new Handler().post(new Runnable() {
-            @Override
-            public void run() {
-
-            }
-        })
-*/
+        final Button btn = (Button)view.findViewById(R.id.btn_ok);
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,14 +128,28 @@ public class Fragment03 extends Fragment {
             }
         });
 
-        if(checkNetworkState()) {
-            // 지도 객체 참조
-            map = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map)).getMap();
-            // 위치 확인하여 위치 표시 시작
-            showCurrentLocation(37.563739, 126.978907);   //서울시청 : 37.563739, 126.978907 (위도, 경도)
+        if (checkNetworkState()) {
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    // 지도 객체 참조
+                    map = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map)).getMap();
+                    // 위치 확인하여 위치 표시 시작
+                    final LatLng curPoint = new LatLng(37.563739, 126.978907);  //서울시청 : 37.563739, 126.978907 (위도, 경도)
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            map.animateCamera(CameraUpdateFactory.newLatLngZoom(curPoint, 11));  //속도 이슈 문제
+                        }
+                    });
+                }
+            }).start();
+
         } else {
             new Common(getActivity()).showSettingsAlert();
         }
+
         return view;
 	}
 
@@ -159,52 +165,24 @@ public class Fragment03 extends Fragment {
         return mobile.isConnected() || wifi.isConnected();
     }
 
-
-/*
-    @Override
-    public void onResume() {
-        super.onResume();
-        new Handler().postDelayed(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                if(checkNetworkState()){
-                    map = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map)).getMap();
-                    showCurrentLocation(37.563739, 126.978907);
-                }
-            }
-        }, 5500);// 5.5초 정도 딜레이를 준 후 시작
-    }
-*/
-
     /**
-     * 현재 위치의 지도를 보여주기 위해 정의한 메소드
+     * 지정한 위치를 보여주는 메소드
      *
      * @param latitude
      * @param longitude
      */
-    private void showCurrentLocation(Double latitude, Double longitude) {
-        // 현재 위치를 이용해 LatLon 객체 생성
-        LatLng curPoint = new LatLng(latitude, longitude);
-        map.animateCamera(CameraUpdateFactory.newLatLngZoom(curPoint, 11));
-        // 지도 유형 설정. 지형도인 경우에는 GoogleMap.MAP_TYPE_TERRAIN, 위성 지도인 경우에는 GoogleMap.MAP_TYPE_SATELLITE
-        map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-
-    }
-
-    /**
-     * 지정한 위치를 보여주는 메소드
-     */
     private void showLocation(Double latitude, Double longitude) {
+        // 현재 위치를 이용해 LatLon 객체 생성
         LatLng curPoint = new LatLng(latitude, longitude);
 
         map.animateCamera(CameraUpdateFactory.newLatLngZoom(curPoint, 15));
 
         MarkerOptions options = new MarkerOptions().position(curPoint);
         map.addMarker(options).showInfoWindow();   //마커 화면에 띄움
+        // 지도 유형 설정. 지형도인 경우에는 GoogleMap.MAP_TYPE_TERRAIN, 위성 지도인 경우에는 GoogleMap.MAP_TYPE_SATELLITE
         map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
     }
+
 
 }
