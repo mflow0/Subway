@@ -1,22 +1,11 @@
 package com.e.moon.subway;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.res.Resources;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -24,12 +13,6 @@ import android.widget.LinearLayout;
 import android.widget.TabHost;
 import android.widget.TextView;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-
-import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
 
@@ -38,7 +21,6 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
 
     private TabHost mTabHost;
     private ViewPager mViewPager;
-    private HashMap<String, TabInfo> mapTabInfo = new HashMap<String, TabInfo>();
     private PagerAdapter mPagerAdapter;
 
     private class TabInfo {
@@ -122,13 +104,9 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
         mTabHost.setup();
         TabInfo tabInfo = null;
         MainActivity.AddTab(this, this.mTabHost, this.mTabHost.newTabSpec("Tab1").setIndicator(createTabView(this, res.getString(R.string.tab1), R.drawable.tag)), ( tabInfo = new TabInfo("Tab1", Fragment01.class, args)));
-        this.mapTabInfo.put(tabInfo.tag, tabInfo);
         MainActivity.AddTab(this, this.mTabHost, this.mTabHost.newTabSpec("Tab2").setIndicator(createTabView(this, res.getString(R.string.tab2), R.drawable.search)), ( tabInfo = new TabInfo("Tab2", Fragment02.class, args)));
-        this.mapTabInfo.put(tabInfo.tag, tabInfo);
         MainActivity.AddTab(this, this.mTabHost, this.mTabHost.newTabSpec("Tab3").setIndicator(createTabView(this, res.getString(R.string.tab3), R.drawable.location_pin)), ( tabInfo = new TabInfo("Tab3", Fragment03.class, args)));
-        this.mapTabInfo.put(tabInfo.tag, tabInfo);
         MainActivity.AddTab(this, this.mTabHost, this.mTabHost.newTabSpec("Tab4").setIndicator(createTabView(this, res.getString(R.string.tab4), R.drawable.settings)), ( tabInfo = new TabInfo("Tab4", Fragment04.class, args)));
-        this.mapTabInfo.put(tabInfo.tag, tabInfo);
 
         // Default to first tab
         //this.onTabChanged("Tab1");
@@ -148,7 +126,6 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
      * OnTabChangeListener method
      * */
     public void onTabChanged(String tag) {
-        //TabInfo newTab = this.mapTabInfo.get(tag);
         int pos = this.mTabHost.getCurrentTab();
         this.mViewPager.setCurrentItem(pos);
     }

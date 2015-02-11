@@ -3,6 +3,7 @@ package com.e.moon.subway;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 
 import java.util.List;
 
@@ -11,7 +12,7 @@ import java.util.List;
  * 뷰페이저 어댑터를 정의합니다.
  */
 
-public class PagerAdapter extends FragmentPagerAdapter {
+public class PagerAdapter extends FragmentStatePagerAdapter {
 
     private List<Fragment> fragments;
 
