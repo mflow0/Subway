@@ -13,6 +13,8 @@ import android.widget.LinearLayout;
 import android.widget.TabHost;
 import android.widget.TextView;
 
+import com.e.moon.subway.adapter.PagerAdapter;
+
 import java.util.List;
 import java.util.Vector;
 

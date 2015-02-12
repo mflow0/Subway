@@ -11,5 +11,10 @@
     <string name="station1">찾을 역을 입력해주세요.</string>
     <string name="ok">확인</string>
     <string name="station2">찾기</string>
+    <string name="hello_world">안녕하세요</string>
+    <string name="action_settings">설정</string>
+    <string name="map_key">AIzaSyD3Yt8U0fDYEpNRLhJ63NzVtMID_B4YjVE</string>
+    <string name="info">지하철노선도 v.1.0\n Mflow\n\n이 프로그램은 수도권 지하철정보를 나타냅니다.</string>
+
 
 </resources>

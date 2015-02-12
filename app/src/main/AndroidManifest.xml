@@ -45,6 +45,12 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".AboutDialog"
+            android:theme="@android:style/Theme.Dialog"
+            />
+        <activity android:name=".Facebook" />
+
     </application>
 
 </manifest>

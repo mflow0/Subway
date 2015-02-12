@@ -4,14 +4,13 @@
     android:background="@color/button_material_light"
     >
 
-    <TextView
-        android:id="@+id/text01"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <ListView
+        android:layout_margin="5dp"
+        android:id="@+id/list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:text="제품 내용 04"
-        android:textSize="20dp"
-        android:textColor="#ffad8745" />
+        />
 
 </RelativeLayout>
