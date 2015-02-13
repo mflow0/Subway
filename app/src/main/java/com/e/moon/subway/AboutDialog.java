@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
+import android.widget.LinearLayout;
 
 /**
  * Created by moon on 15. 2. 12.
@@ -18,8 +19,7 @@ public class AboutDialog extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.about);
 
-        BitmapButton btn = (BitmapButton) findViewById(R.id.confirmBtn);
-        btn.setBitmapId(R.drawable.confirm_btn_normal, R.drawable.confirm_btn_clicked);
+        LinearLayout btn = (LinearLayout) findViewById(R.id.layout01);
         btn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 finish();

@@ -3,6 +3,8 @@ package com.e.moon.subway;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -31,9 +33,11 @@ import java.util.ArrayList;
         View v = inflater.inflate(R.layout.frag04, container, false);
 
         arItem = new ArrayList<MyItemInfo>();
-        mi = new MyItemInfo(R.drawable.facebook, "문의하기");
+        mi = new MyItemInfo(R.drawable.facebook, "페이스북 연동");
         arItem.add(mi);
-        mi = new MyItemInfo(R.drawable.info, "정보");
+        mi = new MyItemInfo(R.drawable.no_mail, "문의 / 오류보고");
+        arItem.add(mi);
+        mi = new MyItemInfo(R.drawable.info, "앱 정보");
         arItem.add(mi);
 
         MyAdapter = new MyListAdapter(getActivity(),
@@ -58,8 +62,15 @@ import java.util.ArrayList;
                             startActivityForResult(intent1, 1001);
                             break;
                         case 1:
-                            Intent intent2 = new Intent(getActivity(), AboutDialog.class);
+                            Uri uri = Uri.parse("mailto:moonbs11@naver.com");
+                            Intent intent2 = new Intent(Intent.ACTION_SENDTO, uri);
+                            intent2.putExtra(Intent.EXTRA_SUBJECT, "[문의/오류보고]");
+                            intent2.putExtra(Intent.EXTRA_TEXT, "DEVICE : "+ Build.MODEL+"\nAndroid SDK Version : "+Build.VERSION.SDK_INT+"\n\n");
                             startActivityForResult(intent2, 1002);
+                            break;
+                        case 2:
+                            Intent intent3 = new Intent(getActivity(), AboutDialog.class);
+                            startActivityForResult(intent3, 1003);
                             break;
                     }
                 }

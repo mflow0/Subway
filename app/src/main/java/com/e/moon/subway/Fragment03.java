@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -63,7 +64,7 @@ public class Fragment03 extends Fragment {
         mCoder = new Geocoder(getActivity(), Locale.KOREAN);
         result = (TextView)view.findViewById(R.id.text22);
         final EditText editText = (EditText)view.findViewById(R.id.edit01);
-        final Button btn = (Button)view.findViewById(R.id.btn_ok);
+        final ImageView btn = (ImageView)view.findViewById(R.id.btn_ok);
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,11 +80,13 @@ public class Fragment03 extends Fragment {
                         try {
                             addresses = mCoder.getFromLocationName(text, 10);    //지역 이름으로 주소 찾기. 최대 10개까지 세팅
                         } catch (IOException e) {
+                            result.setVisibility(View.VISIBLE);
                             result.setText("IO Error (실행도중 에러) : " + e.getMessage());
                             return;
                         }
 
                         if (addresses == null) {  // null 값일 경우
+                            result.setVisibility(View.VISIBLE);
                             result.setText("주소를 찾을 수 없습니다.");
                         }
                         try{
@@ -104,7 +107,7 @@ public class Fragment03 extends Fragment {
 
                             new AlertDialog.Builder(getActivity())
                                     .setTitle("길 찾기")
-                                    .setIcon(R.drawable.menu_search)
+                                    .setIcon(R.drawable.search_s)
                                     .setCancelable(false)
                                     .setSingleChoiceItems(strings, mSelect, new DialogInterface.OnClickListener() {
                                         @Override
@@ -118,6 +121,7 @@ public class Fragment03 extends Fragment {
                                     .setNegativeButton("닫기", null)
                                     .show();
                         }catch(NullPointerException e) {
+                            result.setVisibility(View.VISIBLE);
                             result.setText("주소를 찾을 수 없습니다.");
                         }
                     }

@@ -14,6 +14,8 @@
     <string name="ok">ok</string>
     <string name="station2">Search</string>
     <string name="map_key">AIzaSyD3Yt8U0fDYEpNRLhJ63NzVtMID_B4YjVE</string>
-    <string name="info">subway v.1.0\n Mflow\n\nThis program represents the metropolitan subway information</string>
+    <string name="info">subway v.1.0\n Mflow\n\nThis program provides the metropolitan subway information.</string>
+    <string name="app_id">1589931647886750</string>
+    <string name="board_detail_activity_title">hello</string>
 
 </resources>
