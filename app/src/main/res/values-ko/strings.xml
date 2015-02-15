@@ -16,6 +16,12 @@
     <string name="map_key">AIzaSyD3Yt8U0fDYEpNRLhJ63NzVtMID_B4YjVE</string>
     <string name="info">지하철노선도 v.1.0\n Mflow\n\n이 프로그램은 수도권 지하철정보를 제공합니다.</string>
     <string name="app_id">1589931647886750</string>
-
-
+    <string name="com_facebook_loginview_log_in_button">로그인</string>
+    <string name="com_facebook_picker_done_button_text">완료</string>
+    <string name="com_facebook_choose_friends">친구 선택</string>
+    <string name="com_facebook_usersettingsfragment_logged_in">로그인 중</string>
+    <string name="com_facebook_usersettingsfragment_not_logged_in">비로그인 중</string>
+    <string name="com_facebook_loginview_cancel_action">취소</string>
+    <string name="com_facebook_loginview_log_out_action">로그아웃</string>
+    <string name="com_facebook_loginview_log_out_button">로그아웃</string>
 </resources>

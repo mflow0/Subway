@@ -3,10 +3,10 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:background="@drawable/about_background"
-    android:id="@+id/layout01"
     >
 
     <LinearLayout
+        android:id="@+id/layout01"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -20,7 +20,6 @@
             android:layout_marginRight="5dp"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="20dp"
-            android:layout_marginBottom="15dp"
             android:layout_gravity="center_horizontal"
             android:gravity="center_horizontal"
             android:textSize="14dp"
@@ -28,7 +27,26 @@
             android:textColor="#ff000000"
             android:text="@string/info"
             />
+    </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="10dp"
+        android:gravity="center"
+        >
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/twitter"
+            android:id="@+id/twitter"
+            />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/facebook_se"
+            android:id="@+id/facebook_se"
+            />
     </LinearLayout>
 
 </LinearLayout>

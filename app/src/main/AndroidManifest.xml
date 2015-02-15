@@ -54,8 +54,12 @@
         <activity
             android:name=".AboutDialog"
             android:theme="@android:style/Theme.Dialog"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             />
-        <activity android:name=".Facebook" />
+        <activity android:name=".Facebook"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            />
 
 
     </application>

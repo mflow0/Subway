@@ -144,7 +144,7 @@ public class Fragment03 extends Fragment {
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            map.animateCamera(CameraUpdateFactory.newLatLngZoom(curPoint, 11));  //속도 이슈 문제
+                            map.moveCamera(CameraUpdateFactory.newLatLngZoom(curPoint, 11));  //속도 이슈 문제
                         }
                     });
                 }
