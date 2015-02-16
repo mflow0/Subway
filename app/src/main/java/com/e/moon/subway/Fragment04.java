@@ -33,7 +33,7 @@ import java.util.ArrayList;
         View v = inflater.inflate(R.layout.frag04, container, false);
 
         arItem = new ArrayList<MyItemInfo>();
-        mi = new MyItemInfo(R.drawable.facebook, "앱 공유");
+        mi = new MyItemInfo(R.drawable.ic_launcher, "지하철 정보");
         arItem.add(mi);
         mi = new MyItemInfo(R.drawable.no_mail, "문의 / 오류보고");
         arItem.add(mi);
@@ -58,8 +58,8 @@ import java.util.ArrayList;
                     Log.d("Select Item = ", String.valueOf(position));
                     switch (position) {
                         case 0:
-                            Intent intent1 = new Intent(getActivity(), Facebook.class);
-                            startActivityForResult(intent1, 1001);
+                            //Intent intent1 = new Intent(getActivity(), setting.class);
+                            //startActivityForResult(intent1, 1001);
                             break;
                         case 1:
                             Uri uri = Uri.parse("mailto:moonbs11@naver.com");
