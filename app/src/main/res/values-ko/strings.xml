@@ -8,7 +8,7 @@
     <string name="tab4">설정</string>
     <string name="tab1_text">알람 설정</string>
     <string name="alarm">역 설정</string>
-    <string name="station1">찾을 역을 입력해주세요.</string>
+    <string name="station1"> 검색할 역을 입력해주세요.</string>
     <string name="ok">확인</string>
     <string name="station2">찾기</string>
     <string name="hello_world">안녕하세요</string>
@@ -24,4 +24,15 @@
     <string name="com_facebook_loginview_cancel_action">취소</string>
     <string name="com_facebook_loginview_log_out_action">로그아웃</string>
     <string name="com_facebook_loginview_log_out_button">로그아웃</string>
+    <string name="facebook_caption">Mflow</string>
+    <string name="facebook_description">이 프로그램은 수도권 지하철정보를 제공합니다.</string>
+    <string name="facebook_name">지하철노선도 v.1.0</string>
+    <string name="facebook_picture">https://raw.githubusercontent.com/moonbs11/HelloWorld/master/app/src/main/res/drawable-xxhdpi/ic_launcher.png</string>
+    <string name="facebook_link">http://www.google.com</string>
+
+    <array name="station">
+        <item>1번</item>
+        <item>2번</item>
+        <item>3번</item>
+    </array>
 </resources>

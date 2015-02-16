@@ -18,4 +18,10 @@
     <string name="app_id">1589931647886750</string>
     <string name="board_detail_activity_title">hello</string>
 
+    <array name="station">
+        <item>1s</item>
+        <item>2s</item>
+        <item>3s</item>
+    </array>
+
 </resources>

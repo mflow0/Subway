@@ -5,12 +5,6 @@
 	android:layout_height="match_parent"
 	android:orientation="vertical"
     >
-	<LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:id="@+id/main_ui_container"
-        >
 	<RelativeLayout
         android:layout_width="match_parent"
 		android:layout_height="60dp"
@@ -36,13 +30,6 @@
             facebook:preset_size="small" />
 
 	</RelativeLayout>
-    <Button
-        android:id="@+id/pickFriendsButton"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="Pick Some Friends"
-         />
-    </LinearLayout>
     <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="fill_parent"

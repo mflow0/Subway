@@ -1,17 +1,46 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/button_material_light"
+    android:orientation="vertical"
     >
 
-    <TextView
-        android:id="@+id/text01"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:text="제품 내용 02"
-        android:textSize="20dp"
-        android:textColor="#ffad8745" />
+        android:orientation="horizontal"
+        android:layout_margin="10dp"
+        >
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="9.5dp"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
+            android:paddingBottom="7dp"
+            android:id="@+id/spin"
+            android:background="@drawable/dropdown"
+            />
+        <EditText
+            android:background="@drawable/drop_text"
+            android:layout_width="0dp"
+            android:padding="7dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/edit01"
+            android:hint="@string/station1"
+            android:layout_weight="1"
+            android:singleLine="true"
+            />
+        <ImageView
+            android:background="@drawable/drop_button"
+            android:padding="7dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="-1dp"
+            android:src="@drawable/search_s"
+            android:id="@+id/btn_ok"
+            />
 
-</RelativeLayout>
+    </LinearLayout>
+
+</LinearLayout>

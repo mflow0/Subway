@@ -33,7 +33,7 @@ import java.util.ArrayList;
         View v = inflater.inflate(R.layout.frag04, container, false);
 
         arItem = new ArrayList<MyItemInfo>();
-        mi = new MyItemInfo(R.drawable.facebook, "페이스북 연동");
+        mi = new MyItemInfo(R.drawable.facebook, "앱 공유");
         arItem.add(mi);
         mi = new MyItemInfo(R.drawable.no_mail, "문의 / 오류보고");
         arItem.add(mi);
