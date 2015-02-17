@@ -1,10 +1,13 @@
 package com.e.moon.subway;
 
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -38,6 +41,10 @@ import java.util.Locale;
  * */
 
 public class Fragment03 extends Fragment {
+    private LocationManager mLocationManager;
+    private LocationIntentReceiver mIntentReceiver;
+    private ArrayList mPendingIntentList;
+    private String intentKey = "LocationProximity";
 
     private static GoogleMap map;
     private View view;
@@ -53,12 +60,16 @@ public class Fragment03 extends Fragment {
     private ImageView btn;
     private Switch sw;
     private TextView alarm;
+    private Double Latitude2;
+    private Double longitude2;
 
     TextView result;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mLocationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        mPendingIntentList = new ArrayList();
 
     }
 
@@ -179,6 +190,7 @@ public class Fragment03 extends Fragment {
                                         alarm.setText(strings[which]);
                                         HashMap<String, Double> reqMap = mapList.get(which);
                                         showLocation(reqMap.get("Latitude"), reqMap.get("Longitude"));
+                                        curPoint2(reqMap.get("Latitude"), reqMap.get("Longitude"));
                                         dialog.cancel();
                                     }
                                 })
@@ -227,11 +239,47 @@ public class Fragment03 extends Fragment {
     private void switchCheck(CompoundButton buttonView,boolean isChecked){
         Toast.makeText(getActivity(), "체크 상태 = " + isChecked, Toast.LENGTH_SHORT).show();
         if(isChecked){
-
-
+            if(Latitude2 != null && longitude2 != null) {
+                register(1001, Latitude2, longitude2, 100, -1);
+                mIntentReceiver = new LocationIntentReceiver(intentKey);
+                getActivity().registerReceiver(mIntentReceiver, mIntentReceiver.getFilter());
+            }
         }else{
+            unregister();
+        }
+    }
+    /**
+     * register the proximity intent receiver
+     */
+    private void register(int id, double latitude, double longitude, float radius, long expiration) {
+        Intent proximityIntent = new Intent(intentKey);
+        proximityIntent.putExtra("id", id);
+        proximityIntent.putExtra("latitude", latitude);
+        proximityIntent.putExtra("longitude", longitude);
+        PendingIntent intent = PendingIntent.getBroadcast(getActivity(), id, proximityIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
+        mLocationManager.addProximityAlert(latitude, longitude, radius, expiration, intent);
+        mPendingIntentList.add(intent);
+    }
+
+    /**
+     * 등록한 정보 해제
+     */
+    private void unregister() {
+        if (mPendingIntentList != null) {
+            PendingIntent curIntent = (PendingIntent) mPendingIntentList.get(0);
+            mLocationManager.removeProximityAlert(curIntent);
+            mPendingIntentList.remove(0);
+        }
+
+        if (mIntentReceiver != null) {
+            getActivity().unregisterReceiver(mIntentReceiver);
+            mIntentReceiver = null;
         }
     }
 
+    private void curPoint2(Double x,Double y){
+        Latitude2 = x;
+        longitude2 = y;
+    }
 }
