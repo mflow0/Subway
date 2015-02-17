@@ -14,10 +14,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -47,6 +49,10 @@ public class Fragment03 extends Fragment {
     private String[] strings;
     private InputMethodManager input_Manager;
     private final Handler handler = new Handler();
+    private EditText editText;
+    private ImageView btn;
+    private Switch sw;
+    private TextView alarm;
 
     TextView result;
 
@@ -63,96 +69,27 @@ public class Fragment03 extends Fragment {
         input_Manager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         mCoder = new Geocoder(getActivity(), Locale.KOREAN);
         result = (TextView)view.findViewById(R.id.text22);
-        final EditText editText = (EditText)view.findViewById(R.id.edit01);
-        final ImageView btn = (ImageView)view.findViewById(R.id.btn_ok);
-
+        editText = (EditText)view.findViewById(R.id.edit01);
+        btn = (ImageView)view.findViewById(R.id.btn_ok);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                input_Manager.hideSoftInputFromWindow(editText.getWindowToken(),0);  //키보드 닫기
-                String text = editText.getText().toString();
-                List<Address> addresses;
-                Locality = new ArrayList<String>();  //클릭 시 마다 객체 생성하여  데이터가 쌓여서 중복되지 않게 4+2+1
-                mapList = new ArrayList<HashMap>();
-
-                if(checkNetworkState()) {
-                    if ( text.length() != 0 ) {
-                        try {
-                            addresses = mCoder.getFromLocationName(text, 10);    //지역 이름으로 주소 찾기. 최대 10개까지 세팅
-                        } catch (IOException e) {
-                            result.setVisibility(View.VISIBLE);
-                            result.setText("IO Error (실행도중 에러) : " + e.getMessage());
-                            return;
-                        }
-
-                        if (addresses == null) {  // null 값일 경우
-                            result.setVisibility(View.VISIBLE);
-                            result.setText("주소를 찾을 수 없습니다.");
-                        }
-                        try{
-                            for (Address add : addresses) {
-                                if (add.getCountryCode().trim().equalsIgnoreCase("KR")) {
-                                    Locality.add(add.getAdminArea()+" "+add.getLocality()+" "+add.getFeatureName());
-                                    req = new HashMap<String, Double>();
-                                    req.put("Latitude",add.getLatitude());
-                                    req.put("Longitude", add.getLongitude());
-                                    mapList.add(req);
-
-                                }
-                            }
-                            strings = new String[Locality.size()];
-                            for (int i = 0; i < strings.length; i++) {
-                                strings[i] = Locality.get(i);
-                            }
-
-                            new AlertDialog.Builder(getActivity())
-                                    .setTitle("길 찾기")
-                                    .setIcon(R.drawable.search_s)
-                                    .setCancelable(false)
-                                    .setSingleChoiceItems(strings, mSelect, new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            result.setText(strings[which]);
-                                            HashMap<String, Double> reqMap = mapList.get(which);
-                                            showLocation(reqMap.get("Latitude"), reqMap.get("Longitude"));
-                                            dialog.cancel();
-                                        }
-                                    })
-                                    .setNegativeButton("닫기", null)
-                                    .show();
-                        }catch(NullPointerException e) {
-                            result.setVisibility(View.VISIBLE);
-                            result.setText("주소를 찾을 수 없습니다.");
-                        }
-                    }
-                } else {
-                    new Common(getActivity()).showSettingsAlert();
-                }
-
+                btn_Init();
             }
         });
 
-        if (checkNetworkState()) {
+        sw = (Switch) view.findViewById(R.id.switch01);
+        sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                switchCheck(buttonView,isChecked);
+            }
+        });
 
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    // 지도 객체 참조
-                    map = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map)).getMap();
-                    // 위치 확인하여 위치 표시 시작
-                    final LatLng curPoint = new LatLng(37.563739, 126.978907);  //서울시청 : 37.563739, 126.978907 (위도, 경도)
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            map.moveCamera(CameraUpdateFactory.newLatLngZoom(curPoint, 11));  //속도 이슈 문제
-                        }
-                    });
-                }
-            }).start();
+        alarm = (TextView) view.findViewById(R.id.alarm);
 
-        } else {
-            new Common(getActivity()).showSettingsAlert();
-        }
+        init();
+
 
         return view;
 	}
@@ -188,5 +125,113 @@ public class Fragment03 extends Fragment {
 
     }
 
+    /**
+     * ImageView 클릭시 실행할 method
+     */
+    private void btn_Init(){
+        input_Manager.hideSoftInputFromWindow(editText.getWindowToken(),0);  //키보드 닫기
+        String text = editText.getText().toString();
+        List<Address> addresses;
+        Locality = new ArrayList<String>();  //클릭 시 마다 객체 생성하여  데이터가 쌓여서 중복되지 않게 4+2+1
+        mapList = new ArrayList<HashMap>();
+
+        if(checkNetworkState()) {
+            if ( text.length() != 0 ) {
+                try {
+                    addresses = mCoder.getFromLocationName(text, 10);    //지역 이름으로 주소 찾기. 최대 10개까지 세팅
+                } catch (IOException e) {
+                    sw.setVisibility(View.VISIBLE);
+                    result.setVisibility(View.VISIBLE);
+                    result.setText("실행도중 에러가 발생하였습니다");
+                    return;
+                }
+
+                if (addresses == null) {  // null 값일 경우
+                    //result.setVisibility(View.VISIBLE);
+                    //result.setText("주소를 찾을 수 없습니다.");
+                }
+                try{
+                    for (Address add : addresses) {
+                        if (add.getCountryCode().trim().equalsIgnoreCase("KR")) {
+                            Locality.add(" "+add.getAdminArea()+" "+add.getLocality()+" ("+add.getFeatureName()+")");
+                            req = new HashMap<String, Double>();
+                            req.put("Latitude",add.getLatitude());
+                            req.put("Longitude", add.getLongitude());
+                            mapList.add(req);
+
+                        }
+                    }
+                    strings = new String[Locality.size()];
+                    for (int i = 0; i < strings.length; i++) {
+                        strings[i] = Locality.get(i);
+                    }
+
+                    if(strings.length != 0) {
+                        new AlertDialog.Builder(getActivity())
+                                .setTitle("길 찾기")
+                                .setIcon(R.drawable.search_s)
+                                .setCancelable(false)
+                                .setSingleChoiceItems(strings, mSelect, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        result.setVisibility(View.GONE);
+                                        sw.setVisibility(View.VISIBLE);
+                                        alarm.setText(strings[which]);
+                                        HashMap<String, Double> reqMap = mapList.get(which);
+                                        showLocation(reqMap.get("Latitude"), reqMap.get("Longitude"));
+                                        dialog.cancel();
+                                    }
+                                })
+                                .setNegativeButton("닫기", null)
+                                .show();
+                    }
+                }catch(NullPointerException e) {
+                    e.printStackTrace();
+                }
+            }
+        } else {
+            new Common(getActivity()).showSettingsAlert();
+        }
+    }
+
+    /**
+     * 지도를 화면에 표시해주는 method
+     */
+    private void init(){
+        if (checkNetworkState()) {
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    // 지도 객체 참조
+                    map = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map)).getMap();
+                    // 위치 확인하여 위치 표시 시작
+                    final LatLng curPoint = new LatLng(37.563739, 126.978907);  //서울시청 (위도, 경도)
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            map.moveCamera(CameraUpdateFactory.newLatLngZoom(curPoint, 11));
+                        }
+                    });
+                }
+            }).start();
+
+        } else {
+            new Common(getActivity()).showSettingsAlert();
+        }
+    }
+
+    /**
+     * 스위치가 변경될때 실행할 method
+     */
+    private void switchCheck(CompoundButton buttonView,boolean isChecked){
+        Toast.makeText(getActivity(), "체크 상태 = " + isChecked, Toast.LENGTH_SHORT).show();
+        if(isChecked){
+
+
+        }else{
+
+        }
+    }
 
 }

@@ -18,8 +18,8 @@
     <string name="app_id">1589931647886750</string>
 
     <array name="station">
-        <item>1번</item>
-        <item>2번</item>
-        <item>3번</item>
+        <item>역 정보</item>
+        <item>첫차-막차</item>
+        <item>역 시간표</item>
     </array>
 </resources>

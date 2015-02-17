@@ -19,9 +19,9 @@
     <string name="board_detail_activity_title">hello</string>
 
     <array name="station">
-        <item>1s</item>
-        <item>2s</item>
-        <item>3s</item>
+        <item>Information</item>
+        <item>First-Last</item>
+        <item>Timetable</item>
     </array>
 
 </resources>
