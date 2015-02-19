@@ -1,16 +1,20 @@
 package com.e.moon.subway;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.widget.Toast;
+import android.net.Uri;
 
 /**
  * Created by moon on 15. 2. 17.
  */
 public class LocationIntentReceiver extends BroadcastReceiver {
-
+    protected static final int NAPNOTI = 1;
+    private NotificationManager mNotiManager;
     private String mExpectedAction;
     private Intent mLastReceivedIntent;
 
@@ -32,15 +36,21 @@ public class LocationIntentReceiver extends BroadcastReceiver {
      */
     @Override
     public void onReceive(Context context, Intent intent) {
+        mNotiManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
+        PendingIntent content = PendingIntent.getActivity(
+                context, 0, new Intent(), PendingIntent.FLAG_UPDATE_CURRENT);
+
         if (intent != null) {
             mLastReceivedIntent = intent;
+            String location = intent.getStringExtra("location");
 
-            int id = intent.getIntExtra("id", 0);
-            double latitude = intent.getDoubleExtra("latitude", 0.0D);
-            double longitude = intent.getDoubleExtra("longitude", 0.0D);
+            Notification notification = new Notification(R.drawable.ic_launcher, location+"에 도착하였습니다.", System.currentTimeMillis());
+            notification.flags |= Notification.FLAG_AUTO_CANCEL;
+            notification.sound = Uri.parse("android.resource://com.e.moon.subway/" + R.raw.electronic);
+            notification.setLatestEventInfo(context, "도착 알림", location+"에 도착하였습니다.", content);
 
-            Toast.makeText(context, "근접한 커피숍 : " + id + ", " + latitude + ", " + longitude, Toast.LENGTH_SHORT).show();
-            // 통지 구현해야됨 위치에 접근했을때 울릴 프로세스
+            mNotiManager.notify(LocationIntentReceiver.NAPNOTI, notification);
+
         }
     }
 

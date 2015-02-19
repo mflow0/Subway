@@ -1,6 +1,7 @@
 package com.e.moon.subway;
 
 import android.app.AlertDialog;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -41,10 +42,12 @@ import java.util.Locale;
  * */
 
 public class Fragment03 extends Fragment {
+
     private LocationManager mLocationManager;
     private LocationIntentReceiver mIntentReceiver;
     private ArrayList mPendingIntentList;
     private String intentKey = "LocationProximity";
+    private String location;
 
     private static GoogleMap map;
     private View view;
@@ -70,7 +73,6 @@ public class Fragment03 extends Fragment {
         super.onCreate(savedInstanceState);
         mLocationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         mPendingIntentList = new ArrayList();
-
     }
 
     @Override
@@ -165,6 +167,7 @@ public class Fragment03 extends Fragment {
                     for (Address add : addresses) {
                         if (add.getCountryCode().trim().equalsIgnoreCase("KR")) {
                             Locality.add(" "+add.getAdminArea()+" "+add.getLocality()+" ("+add.getFeatureName()+")");
+                            location = add.getFeatureName();
                             req = new HashMap<String, Double>();
                             req.put("Latitude",add.getLatitude());
                             req.put("Longitude", add.getLongitude());
@@ -253,9 +256,7 @@ public class Fragment03 extends Fragment {
      */
     private void register(int id, double latitude, double longitude, float radius, long expiration) {
         Intent proximityIntent = new Intent(intentKey);
-        proximityIntent.putExtra("id", id);
-        proximityIntent.putExtra("latitude", latitude);
-        proximityIntent.putExtra("longitude", longitude);
+        proximityIntent.putExtra("location",location);
         PendingIntent intent = PendingIntent.getBroadcast(getActivity(), id, proximityIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
         mLocationManager.addProximityAlert(latitude, longitude, radius, expiration, intent);
