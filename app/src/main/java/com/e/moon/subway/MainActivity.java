@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TabHost;
@@ -20,7 +21,7 @@ import java.util.Vector;
 
 
 public class MainActivity extends FragmentActivity implements TabHost.OnTabChangeListener, ViewPager.OnPageChangeListener {
-
+    private InputMethodManager input_Manager;
     private TabHost mTabHost;
     private ViewPager mViewPager;
     private PagerAdapter mPagerAdapter;
@@ -130,6 +131,9 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
     public void onTabChanged(String tag) {
         int pos = this.mTabHost.getCurrentTab();
         this.mViewPager.setCurrentItem(pos);
+
+
+
     }
 
     /**
@@ -145,6 +149,8 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
     }
     @Override
     public void onPageScrollStateChanged(int state) {
+        input_Manager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        input_Manager.hideSoftInputFromWindow(mViewPager.getWindowToken(), 0);
     }
 
 
