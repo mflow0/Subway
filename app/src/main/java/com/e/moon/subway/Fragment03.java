@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.LocationManager;
@@ -47,6 +48,8 @@ public class Fragment03 extends Fragment {
     private LocationIntentReceiver mIntentReceiver;
     private ArrayList mPendingIntentList;
     private String intentKey = "LocationProximity";
+    private SharedPreferences pref;
+    private final String PrefAlarm = "PrefAlarm";
     private String location;
 
     private static GoogleMap map;
@@ -61,7 +64,7 @@ public class Fragment03 extends Fragment {
     private final Handler handler = new Handler();
     private EditText editText;
     private ImageView btn;
-    private Switch sw;
+    protected static Switch sw;
     private TextView alarm;
     private Double Latitude2;
     private Double longitude2;
@@ -72,6 +75,7 @@ public class Fragment03 extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mLocationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        input_Manager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         mPendingIntentList = new ArrayList();
     }
 
@@ -79,34 +83,89 @@ public class Fragment03 extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
         view = inflater.inflate(R.layout.frag03, container, false);
 
-        input_Manager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        init(view);
+        imageView_init(view);
+        alarm_init(view);
+        switch_init(view);
+        map_init();
+        pref_values();
+
+        return view;
+	}
+
+    /**
+     * 초기화 작업
+     */
+    private void init(View view) {
         mCoder = new Geocoder(getActivity(), Locale.KOREAN);
-        result = (TextView)view.findViewById(R.id.text22);
-        editText = (EditText)view.findViewById(R.id.edit01);
-        btn = (ImageView)view.findViewById(R.id.btn_ok);
+        result = (TextView) view.findViewById(R.id.text22);
+        editText = (EditText) view.findViewById(R.id.edit01);
+        btn = (ImageView) view.findViewById(R.id.btn_ok);
+        alarm = (TextView) view.findViewById(R.id.alarm);
+        sw = (Switch) view.findViewById(R.id.switch01);
+    }
+
+    /**
+     * 이미지뷰 버튼 클릭(검색버튼) 초기화작업
+     */
+    private void imageView_init(View view){
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 btn_Init();
             }
         });
+    }
 
-        sw = (Switch) view.findViewById(R.id.switch01);
+    /**
+     * 알람 텍스트 내용 초기화작업
+     */
+    private void alarm_init(View view){
+        alarm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                removeAllPreferences();
+                alarm.setText(null);
+                sw.setChecked(false);
+                sw.setVisibility(View.GONE);
+                alarm.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+            }
+        });
+    }
+
+    /**
+     * 스위치 버튼 초기화작업
+     * */
+    private void switch_init(View view){
         sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 switchCheck(buttonView,isChecked);
             }
         });
+    }
 
-        alarm = (TextView) view.findViewById(R.id.alarm);
+    /**
+     * getSharedPreferences
+     * @alarm
+     * @location
+     * @Latitude
+     * @Longitude
+     */
+    private void pref_values() {
+        pref = getActivity().getSharedPreferences(PrefAlarm,0);
+        alarm.setText(pref.getString("alarm", null));
+        location = pref.getString("location", null);
 
-        init();
-
-
-        return view;
-	}
-
+        if(pref.getString("alarm",null) != null) {
+            Latitude2 = Double.parseDouble(pref.getString("Latitude", null));
+            longitude2 = Double.parseDouble(pref.getString("Longitude", null));
+            alarm.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.cancel,0);
+        }else {
+            sw.setVisibility(View.GONE);
+            alarm.setCompoundDrawablesWithIntrinsicBounds(0,0,0,0);
+        }
+    }
     /**
      * 네트워크 연결 체크
      */
@@ -144,6 +203,7 @@ public class Fragment03 extends Fragment {
     private void btn_Init(){
         input_Manager.hideSoftInputFromWindow(editText.getWindowToken(),0);  //키보드 닫기
         String text = editText.getText().toString();
+        location = text;
         List<Address> addresses;
         Locality = new ArrayList<String>();  //클릭 시 마다 객체 생성하여  데이터가 쌓여서 중복되지 않게 4+2+1
         mapList = new ArrayList<HashMap>();
@@ -153,7 +213,6 @@ public class Fragment03 extends Fragment {
                 try {
                     addresses = mCoder.getFromLocationName(text, 10);    //지역 이름으로 주소 찾기. 최대 10개까지 세팅
                 } catch (IOException e) {
-                    sw.setVisibility(View.VISIBLE);
                     result.setVisibility(View.VISIBLE);
                     result.setText("실행도중 에러가 발생하였습니다");
                     return;
@@ -167,7 +226,6 @@ public class Fragment03 extends Fragment {
                     for (Address add : addresses) {
                         if (add.getCountryCode().trim().equalsIgnoreCase("KR")) {
                             Locality.add(" "+add.getAdminArea()+" "+add.getLocality()+" ("+add.getFeatureName()+")");
-                            location = add.getFeatureName();
                             req = new HashMap<String, Double>();
                             req.put("Latitude",add.getLatitude());
                             req.put("Longitude", add.getLongitude());
@@ -191,10 +249,20 @@ public class Fragment03 extends Fragment {
                                         result.setVisibility(View.GONE);
                                         sw.setVisibility(View.VISIBLE);
                                         alarm.setText(strings[which]);
+                                        alarm.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.cancel,0);
                                         HashMap<String, Double> reqMap = mapList.get(which);
                                         showLocation(reqMap.get("Latitude"), reqMap.get("Longitude"));
                                         curPoint2(reqMap.get("Latitude"), reqMap.get("Longitude"));
                                         dialog.cancel();
+
+                                        pref = getActivity().getSharedPreferences(PrefAlarm, 0);
+                                        SharedPreferences.Editor edit = pref.edit();
+                                        edit.putString("alarm",strings[which]);
+                                        edit.putString("location",location);
+                                        edit.putString("Latitude", String.valueOf(reqMap.get("Latitude")));
+                                        edit.putString("Longitude", String.valueOf(reqMap.get("Longitude")));
+                                        edit.commit();
+
                                     }
                                 })
                                 .setNegativeButton("닫기", null)
@@ -212,7 +280,7 @@ public class Fragment03 extends Fragment {
     /**
      * 지도를 화면에 표시해주는 method
      */
-    private void init(){
+    private void map_init(){
         if (checkNetworkState()) {
 
             new Thread(new Runnable() {
@@ -240,26 +308,30 @@ public class Fragment03 extends Fragment {
      * 스위치가 변경될때 실행할 method
      */
     private void switchCheck(CompoundButton buttonView,boolean isChecked){
-        Toast.makeText(getActivity(), "체크 상태 = " + isChecked, Toast.LENGTH_SHORT).show();
         if(isChecked){
             if(Latitude2 != null && longitude2 != null) {
-                register(1001, Latitude2, longitude2, 100, -1);
+                Toast.makeText(getActivity(), "알람 설정을 시작합니다.", Toast.LENGTH_SHORT).show();
+                register(Latitude2, longitude2);
                 mIntentReceiver = new LocationIntentReceiver(intentKey);
                 getActivity().registerReceiver(mIntentReceiver, mIntentReceiver.getFilter());
             }
         }else{
-            unregister();
+            if(Latitude2 != null && longitude2 != null) {
+                Toast.makeText(getActivity(), "알람 설정을 해제합니다.", Toast.LENGTH_SHORT).show();
+                unregister();
+            }
         }
     }
+
     /**
      * register the proximity intent receiver
      */
-    private void register(int id, double latitude, double longitude, float radius, long expiration) {
+    private void register(double latitude, double longitude) {
         Intent proximityIntent = new Intent(intentKey);
         proximityIntent.putExtra("location",location);
-        PendingIntent intent = PendingIntent.getBroadcast(getActivity(), id, proximityIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        PendingIntent intent = PendingIntent.getBroadcast(getActivity(), 1001, proximityIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
-        mLocationManager.addProximityAlert(latitude, longitude, radius, expiration, intent);
+        mLocationManager.addProximityAlert(latitude, longitude, 10, -1, intent); //반경 10m
         mPendingIntentList.add(intent);
     }
 
@@ -282,5 +354,15 @@ public class Fragment03 extends Fragment {
     private void curPoint2(Double x,Double y){
         Latitude2 = x;
         longitude2 = y;
+    }
+
+    /**
+     * SharedPreferences (ALL Data) 삭제하기
+     */
+    private void removeAllPreferences(){
+        SharedPreferences pref = getActivity().getSharedPreferences(PrefAlarm, 0);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.clear();
+        editor.commit();
     }
 }

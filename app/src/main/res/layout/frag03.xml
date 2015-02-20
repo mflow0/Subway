@@ -56,28 +56,33 @@
             android:layout_height="match_parent" />
     </LinearLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:orientation="horizontal"
+        android:layout_marginRight="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="4dp"
         >
 
         <ImageView
+            android:id="@+id/alarm_img"
+            android:layout_alignParentLeft="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/alarm"
             />
-
         <TextView
+            android:layout_toRightOf="@+id/alarm_img"
+            android:layout_marginTop="3dp"
+            android:layout_marginRight="10dp"
             android:id="@+id/alarm"
-            android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=""
-            />
-
+            android:layout_toStartOf="@+id/switch01"
+            android:layout_toLeftOf="@+id/switch01" />
         <Switch
+            android:layout_alignParentRight="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/switch01"
@@ -85,9 +90,6 @@
             android:textOn="ON"
             android:textOff="OFF"
             android:textStyle="bold"
-            android:visibility="gone"
             />
-    </LinearLayout>
-
-
+    </RelativeLayout>
 </LinearLayout>

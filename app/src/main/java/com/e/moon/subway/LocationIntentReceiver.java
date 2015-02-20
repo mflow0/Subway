@@ -17,6 +17,7 @@ public class LocationIntentReceiver extends BroadcastReceiver {
     private NotificationManager mNotiManager;
     private String mExpectedAction;
     private Intent mLastReceivedIntent;
+    private String location;
 
     public LocationIntentReceiver(String expectedAction){
         mExpectedAction = expectedAction;
@@ -42,16 +43,17 @@ public class LocationIntentReceiver extends BroadcastReceiver {
 
         if (intent != null) {
             mLastReceivedIntent = intent;
-            String location = intent.getStringExtra("location");
-
-            Notification notification = new Notification(R.drawable.ic_launcher, location+"에 도착하였습니다.", System.currentTimeMillis());
-            notification.flags |= Notification.FLAG_AUTO_CANCEL;
-            notification.sound = Uri.parse("android.resource://com.e.moon.subway/" + R.raw.electronic);
-            notification.setLatestEventInfo(context, "도착 알림", location+"에 도착하였습니다.", content);
-
-            mNotiManager.notify(LocationIntentReceiver.NAPNOTI, notification);
-
+            location = intent.getStringExtra("location");
         }
+        Notification notification = new Notification(R.drawable.ic_launcher, location+"에 도착 하였습니다.", System.currentTimeMillis());
+        notification.flags |= Notification.FLAG_AUTO_CANCEL|Notification.FLAG_INSISTENT;
+        notification.sound = Uri.parse("android.resource://com.e.moon.subway/" + R.raw.electronic);
+        notification.setLatestEventInfo(context, "도착 알림", location + "에 도착 하였습니다.", content);
+
+        mNotiManager.notify(LocationIntentReceiver.NAPNOTI, notification);
+
+        Fragment03.sw.setChecked(false);
+
     }
 
     public Intent getLastReceivedIntent() {
