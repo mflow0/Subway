@@ -43,4 +43,19 @@
 
     </LinearLayout>
 
+        <Button
+            android:id="@+id/parse"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="mOnClick"
+            android:text="Parse JSON"
+            />
+        <TextView
+            android:id="@+id/result"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textSize="12sp"
+            android:text="Result"
+            />
+
 </LinearLayout>

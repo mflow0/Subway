@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">지하철 노선도</string>
-    <string name="tab1">알람</string>
+    <string name="app_name">서울 지하철</string>
+    <string name="tab1">노선도</string>
     <string name="tab2">역 검색</string>
     <string name="tab3">역 주변</string>
     <string name="tab4">설정</string>
@@ -13,7 +13,7 @@
     <string name="station2">찾기</string>
     <string name="hello_world">안녕하세요</string>
     <string name="action_settings">설정</string>
-    <string name="map_key">AIzaSyD3Yt8U0fDYEpNRLhJ63NzVtMID_B4YjVE</string>
+    <string name="map_key">AIzaSyBVLIcjtlPcRJKGy-LyPcGE0fhwPBb5G9M</string>
     <string name="info">지하철노선도 v.1.0\n Mflow\n\n이 프로그램은 수도권 지하철정보를 제공합니다.</string>
     <string name="app_id">1589931647886750</string>
 
